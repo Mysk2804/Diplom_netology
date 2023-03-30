@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from server.models import ProductInfo, Product, ProductParameter, Order, OrderItem, Contact, User
+from server.models import ProductInfo, Product, ProductParameter, Order, OrderItem, Contact, User, Category
 
 
 class ContactSerializer(serializers.ModelSerializer):
@@ -17,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name', 'email', 'company', 'position', 'contacts')
+        fields = ('id', 'first_name', 'last_name', 'email', 'contacts', 'type', 'username')
         read_only_fields = ('id',)
 
 

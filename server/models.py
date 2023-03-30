@@ -23,6 +23,9 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
 
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
+
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = "Список пользователей"
@@ -30,6 +33,8 @@ class User(AbstractUser):
 
 class Shop(models.Model):
     name = models.CharField(max_length=100, verbose_name='Название')
+    user_id = models.ForeignKey(User, verbose_name='Менеджер', related_name='shops', blank=True,
+                                on_delete=models.CASCADE, null=True)
 
     class Meta:
         verbose_name = 'Магазин'
