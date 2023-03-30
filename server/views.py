@@ -12,9 +12,11 @@ from django.contrib.auth import authenticate
 import yaml
 from yaml.loader import SafeLoader
 # from django.contrib.auth.password_validation import validate_password
-from server.models import User, Category, Shop, ProductInfo, Product, ProductParameter, OrderItem, Order, Contact
+from server.models import User, Category, Shop, ProductInfo, Product, ProductParameter, OrderItem, Order, Contact,\
+    Parameter
 from server.serializers import OrderSerializer, ContactSerializer, ProductSerializer, ProductInfoSerializer, \
     ProductParameterSerializer, OrderItemSerializer, UserSerializer
+from pprint import pprint
 
 
 class RegisterAccount(APIView):
@@ -103,9 +105,9 @@ class PartnerUpdate(APIView):
                 with open(stream, encoding='UTF-8') as f:
                     # читаем документ YAML
                     data = yaml.load(f, Loader=SafeLoader)
-                    print(data)
+                    pprint(data)
 
-                    shop, _ = Shop.objects.get_or_create(name=data['shop'], user=request.auth.user.id)
+                    shop, _ = Shop.objects.get_or_create(name=data['shop'], user_id=request.auth.user.id)
                     for category in data['categories']:
                         category_object, _ = Category.objects.get_or_create(id=category['id'], name=category['name'])
                         category_object.shops.add(shop.id)
@@ -115,7 +117,6 @@ class PartnerUpdate(APIView):
                         product, _ = Product.objects.get_or_create(name=item['name'], category_id=item['category'])
 
                         product_info = ProductInfo.objects.create(product_id=product.id,
-                                                                  external_id=item['id'],
                                                                   model=item['model'],
                                                                   price=item['price'],
                                                                   price_rrc=item['price_rrc'],
