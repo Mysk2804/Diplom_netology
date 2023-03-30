@@ -78,7 +78,6 @@ class ProductInfo(models.Model):
                                 on_delete=models.CASCADE)
     shop = models.ForeignKey(Shop, verbose_name='Магазин', related_name='product_infos', blank=True,
                              on_delete=models.CASCADE)
-    name = models.CharField(max_length=80, verbose_name='Название', blank=True)
     quantity = models.PositiveIntegerField(verbose_name='Количество')
     price = models.PositiveIntegerField(verbose_name='Цена')
     price_rrc = models.PositiveIntegerField(verbose_name='Рекомендованная розничная цена')
@@ -86,6 +85,9 @@ class ProductInfo(models.Model):
     class Meta:
         verbose_name = 'Информация о продукте'
         verbose_name_plural = "Информационный список о продуктах"
+
+    def __str__(self):
+        return self.model
 
 
 class Parameter(models.Model):
