@@ -19,10 +19,7 @@ from server.signals import new_order
 
 
 class RegisterAccount(APIView):
-    """
-    Для регистрации покупателей
-    """
-    # Регистрация методом POST
+
     def post(self, request, *args, **kwargs):
         if {'first_name', 'last_name', 'email', 'password', 'type', 'username'}.issubset(request.data):
             errors = {}
