@@ -34,7 +34,7 @@ class User(AbstractUser):
 class Shop(models.Model):
     name = models.CharField(max_length=100, verbose_name='Название')
     user = models.ForeignKey(User, verbose_name='Менеджер', related_name='shops', blank=True,
-                                on_delete=models.CASCADE, null=True)
+                             on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Магазин'
@@ -120,6 +120,9 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь', related_name='orders')
     dt = models.DateField(auto_now=True)
     status = models.CharField(max_length=50, default='new', choices=STATE_CHOICES)
+    contact = models.ForeignKey('Contact', verbose_name='Контакт',
+                                blank=True, null=True,
+                                on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Заказ'
@@ -132,7 +135,9 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='Заказ', related_name='ordered_items')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт', related_name='ordered_items')
+    product_info = models.ForeignKey(ProductInfo, verbose_name='Информация о продукте', related_name='ordered_items',
+                                     blank=True,
+                                     on_delete=models.CASCADE)
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE, verbose_name='Магазин', related_name='ordered_items')
     quantity = models.PositiveIntegerField(null=False, verbose_name='Количество')
 
