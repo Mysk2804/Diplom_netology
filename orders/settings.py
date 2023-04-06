@@ -11,12 +11,12 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-from configparser import ConfigParser
+from configparser import RawConfigParser
 import os
 
 
 urlsconf = os.path.join(os.getcwd(), 'config', 'config.ini')
-config = ConfigParser()
+config = RawConfigParser()
 config.read(urlsconf)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7=a4e%%c&vw73rq*^hz_udj-)zgc3t&ewl6_v)qpsz%m^fi$w1'
+SECRET_KEY = config['secret_key']['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
