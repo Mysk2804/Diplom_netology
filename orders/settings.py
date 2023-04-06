@@ -11,6 +11,13 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from configparser import ConfigParser
+import os
+
+
+urlsconf = os.path.join(os.getcwd(), 'config', 'config.ini')
+config = ConfigParser()
+config.read(urlsconf)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -79,9 +86,9 @@ WSGI_APPLICATION = 'orders.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'my_diplom',
-        'USER': 'postgres',
-        'PASSWORD': '123456',
+        'NAME': config['login_db']['database_name'],
+        'USER': config['login_db']['user_db'],
+        'PASSWORD': config['login_db']['password_db'],
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -149,3 +156,12 @@ REST_FRAMEWORK = {
     ),
 
 }
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = config['login_email']['email']
+EMAIL_HOST_PASSWORD = config['login_email']['password']
+EMAIL_PORT = '465'
+EMAIL_USE_SSL = True
+SERVER_EMAIL = EMAIL_HOST_USER
+
+

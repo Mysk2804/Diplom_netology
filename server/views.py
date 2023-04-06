@@ -15,7 +15,7 @@ from server.models import Category, Shop, ProductInfo, Product, ProductParameter
 from server.serializers import UserSerializer, ShopSerializer, ProductInfoSerializer, OrderSerializer, \
     OrderItemSerializer
 from pprint import pprint
-from django.core.mail import EmailMessage
+from server.signals import new_order
 
 
 class RegisterAccount(APIView):
@@ -241,16 +241,14 @@ class OrderView(APIView):
                     return JsonResponse({'Status': False, 'Errors': 'Неправильно указаны аргументы'})
                 else:
                     if is_updated:
-                        EmailMessage()
+                        new_order.send(sender=self.__class__, user_id=request.user.id)
                         return JsonResponse({'Status': True})
 
         return JsonResponse({'Status': False, 'Errors': 'Не указаны все необходимые аргументы'})
 
 
 class PartnerOrders(APIView):
-    """
-    Класс для получения заказов поставщиками
-    """
+
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
